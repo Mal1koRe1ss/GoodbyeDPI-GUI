@@ -1,9 +1,7 @@
-![Static Badge](https://img.shields.io/badge/en-lang?style=flat&label=lang&color=%234933ff&link=https%3A%2F%2Fgithub.com%2FMal1koRe1ss%2FGoodbyeDPI-GUI%2Fblob%2Fmain%2Fdocs%2FREADME.md)
-
+[![en](https://img.shields.io/badge/en-lang?style=flat&label=lang&color=%234933ff)](./readme.md)
 
 # GoodbyeDPI-GUI
 Gelişmiş özellikli GoodbyeDPI Arayüzü.
-
 Geliştirilecek...
 
 ## Lisans
