@@ -2,6 +2,7 @@
 
 # GoodbyeDPI-GUI
 Gelişmiş özellikli GoodbyeDPI Arayüzü.
+
 Geliştirilecek...
 
 ## Lisans
