@@ -1,4 +1,4 @@
-[![tr](https://img.shields.io/badge/en-lang?style=flat&label=lang&color=%234933ff)](./README_TR.md)
+[![tr](https://img.shields.io/badge/tr-lang?style=flat&label=lang&color=%234933ff)](./README_TR.md)
 
 # GoodbyeDPI-GUI
 GoodbyeDPI Gui with advanced features.
