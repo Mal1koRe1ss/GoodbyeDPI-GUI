@@ -1,4 +1,4 @@
-[![en](https://img.shields.io/badge/en-lang?style=flat&label=lang&color=%234933ff)](./readme.md)
+[![en](https://img.shields.io/badge/en-lang?style=flat&label=lang&color=%234933ff)](./README.md)
 
 # GoodbyeDPI-GUI
 Gelişmiş özellikli GoodbyeDPI Arayüzü.
