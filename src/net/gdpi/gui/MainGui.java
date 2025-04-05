@@ -1,17 +1,13 @@
 package net.gdpi.gui;
 
 import javax.swing.*;
-
+import com.formdev.flatlaf.FlatDarkLaf;
 import net.gdpi.handlers.RedirHandler;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URI;
 
-/**
- * Main GUI class for the application.
- */
 public class MainGui extends JFrame implements ActionListener {
     // Constants
     private static final String GITHUB_URL = "https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI";
@@ -43,7 +39,7 @@ public class MainGui extends JFrame implements ActionListener {
     // Labels
     private JLabel toolsLabel = new JLabel("Tools");
     private JLabel logLabel = new JLabel("Log Area");
-    private JLabel copyRightLabel = new JLabel("Copyright 2025 © Goodbye DPI GUI, Pounter & Mal1kore1ss");
+    private JLabel copyRightLabel = new JLabel("Copyright 2025 \u00A9 Goodbye DPI GUI, Pounter & Mal1kore1ss");
 
     public MainGui() {
         initializeLookAndFeel();
@@ -53,9 +49,11 @@ public class MainGui extends JFrame implements ActionListener {
 
     private void initializeLookAndFeel() {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            System.err.println("Look and feel error: " + e.getMessage());
+            FlatDarkLaf.setup();
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
+            ex.printStackTrace();
         }
     }
 
@@ -139,11 +137,13 @@ public class MainGui extends JFrame implements ActionListener {
     }
 
     private void configureWindow() {
-        this.setTitle("Goodbye DPI GUI");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(650, 360);
-        this.setResizable(false);
-        this.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            setTitle("Goodbye DPI GUI");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setSize(650, 360);
+            setResizable(false);
+            setVisible(true);
+        });
     }
 
     private void menuListeners() {
@@ -168,7 +168,7 @@ public class MainGui extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
-            RedirHandler handler = new RedirHandler(this); 
+            RedirHandler handler = new RedirHandler(this);
             handler.runRedir();
         } else if (e.getSource() == installButton) {
             // TODO Service Installer
@@ -196,10 +196,6 @@ public class MainGui extends JFrame implements ActionListener {
     private void setButtons() {
         startButton.setHorizontalTextPosition(SwingConstants.CENTER);
         installButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        removeButton.setHorizontalTextPosition(SwingConstants.CENTER);
-
-        startButton.setFocusPainted(false);
-        installButton.setFocusPainted(false);
         removeButton.setFocusPainted(false);
     }
 
