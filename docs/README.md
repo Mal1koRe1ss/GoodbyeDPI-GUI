@@ -1,3 +1,10 @@
+<div align="right">
+  <a href="./README.md">
+    <img src="https://img.shields.io/badge/english-lang?style=flat&label=lang&color=%234933ff">
+  </a>
+</div>
+
+
 <p align="center">
   <a href="https://github.com/p0unter">
     <img src="https://github.com/user-attachments/assets/da755ae2-a402-4876-ae8e-b518743d1f20" alt="Bootstrap logo" width="200" height="200">
@@ -5,9 +12,7 @@
 </p>
 <h3 align="center">
   GoodbyeDPI-GUI
-  <img src="https://img.shields.io/badge/tr-lang?style=flat&label=lang&color=%234933ff)">
 </h3>
-
 <p align="center">
   DPI'ınızı modern bir arayüzden takip ederek bypasslayın.
   <br>
