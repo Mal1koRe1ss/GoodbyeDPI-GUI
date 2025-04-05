@@ -33,6 +33,7 @@ public class MainGui extends JFrame implements ActionListener {
     // Labels
     JLabel toolsLabel = new JLabel("Tools");
     JLabel logLabel = new JLabel("Log Area");
+    JLabel copyRightLabel = new JLabel("Copyright 2025 © Goodbye DPI GUI, Pounter & Mal1kore1ss");
 
     /**
      * Constructor for the MainGui class.
@@ -41,7 +42,7 @@ public class MainGui extends JFrame implements ActionListener {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            System.err.println("Look and feel ayarlanırken hata oluştu: " + e.getMessage());
+            System.err.println("Look and feel error: " + e.getMessage());
         }
 
         // Add settings to the menu and set up the menu bar
@@ -110,12 +111,15 @@ public class MainGui extends JFrame implements ActionListener {
         // Add the wrapper panel to the center of the frame
         this.add(wrapperPanel_1, BorderLayout.CENTER);
 
+        // Copyright Label Settings
+        copyRightLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        this.add(copyRightLabel, BorderLayout.SOUTH);
+
         // Window settings
         this.setTitle("Goodbye DPI GUI");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(650, 650);
-        Dimension minSize = new Dimension(650, 650);
-        this.setMinimumSize(minSize);
+        this.setSize(650, 360);
+        this.setResizable(false);
 
         this.setVisible(true);
     }
@@ -171,6 +175,10 @@ public class MainGui extends JFrame implements ActionListener {
         startButton.setHorizontalTextPosition(SwingConstants.CENTER);
         installButton.setHorizontalTextPosition(SwingConstants.CENTER);
         removeButton.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        startButton.setFocusPainted(false);
+        installButton.setFocusPainted(false);
+        removeButton.setFocusPainted(false);
     }
 
     /**
