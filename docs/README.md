@@ -1,9 +1,8 @@
 <div align="right">
   <a href="./README.md">
-    <img src="https://img.shields.io/badge/english-lang?style=flat&label=lang&color=%234933ff">
+    <img src="https://img.shields.io/badge/English-lang?style=flat&label=lang&color=%234933ff">
   </a>
 </div>
-
 
 <p align="center">
   <a href="https://github.com/p0unter">
