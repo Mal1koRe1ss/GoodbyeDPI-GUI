@@ -7,55 +7,60 @@ import net.gdpi.gui.MainGui;
 
 public class ConfigHandler {
 
-    public void saveConfig(boolean customRedir, boolean customService, String customParam) {
-            writeRedirConfig(customRedir, customParam);
-            writeServiceConfig(customService, customParam);
-        }
-
     private MainGui mainGui;
 
-    private void writeRedirConfig(boolean customRedir, String customParam) {
+    public ConfigHandler(MainGui mainGui) {
+        this.mainGui = mainGui;
+    }
+
+    public void saveConfig(boolean customRedir, boolean customService,
+            String dnsRedirParam, String serviceParam) {
+        writeRedirConfig(customRedir, dnsRedirParam);
+        writeServiceInstallConfig(customService, serviceParam);
+    }
+
+    private void writeRedirConfig(boolean customRedir, String dnsRedirParam) {
         try {
             String filePath = System.getProperty("user.dir") + "\\dpi\\custom_dnsredir.cmd";
-
             FileWriter writer = new FileWriter(filePath);
-            writer.write("@ECHO OFF\n");
-            writer.write("PUSHD \"%~dp0\"\n");
-            writer.write("set _arch=x86\n");
-            writer.write("IF \"%PROCESSOR_ARCHITECTURE%\"==\"AMD64\" (set _arch=x86_64)\n");
-            writer.write("IF DEFINED PROCESSOR_ARCHITEW6432 (set _arch=x86_64)\n");
-            writer.write("PUSHD \"%_arch%\"\n");
-            writer.write("start \"\" goodbyedpi.exe " + customParam + "\n");
-            writer.write("POPD\n");
-            writer.write("POPD\n");
+
+            writer.write("@ECHO OFF\r\n");
+            writer.write("PUSHD \"%~dp0\"\r\n");
+            writer.write("set _arch=x86\r\n");
+            writer.write("IF \"%PROCESSOR_ARCHITECTURE%\"==\"AMD64\" (set _arch=x86_64)\r\n");
+            writer.write("IF DEFINED PROCESSOR_ARCHITEW6432 (set _arch=x86_64)\r\n");
+            writer.write("PUSHD \"%_arch%\"\r\n");
+            writer.write("start \"\" goodbyedpi.exe " +
+                    (dnsRedirParam.equals("None") ? "" : dnsRedirParam) + "\r\n"); // None ise parametre ekleme
+            writer.write("POPD\r\n");
+            writer.write("POPD\r\n");
             writer.close();
         } catch (IOException e) {
-            mainGui.log("Error while writing the file : " + e.getMessage());
+            mainGui.log("Error writing DNSRedir file: " + e.getMessage());
         }
     }
 
-    private void writeServiceConfig(boolean customService, String customParam) {
+    private void writeServiceInstallConfig(boolean customService, String serviceParam) {
         try {
-            String filePath = System.getProperty("user.dir") + "\\dpi\\custom_dnsredir.cmd";
-
+            String filePath = System.getProperty("user.dir") + "\\dpi\\custom_service_install.cmd";
             FileWriter writer = new FileWriter(filePath);
-            writer.write("@ECHO OFF\n");
-            writer.write("PUSHD \"%~dp0\"\n");
-            writer.write("set _arch=x86\n");
-            writer.write("IF \"%PROCESSOR_ARCHITECTURE%\"==\"AMD64\" (set _arch=x86_64)\n");
-            writer.write("IF DEFINED PROCESSOR_ARCHITEW6432 (set _arch=x86_64)\n");
-            writer.write("\n");
-            writer.write("sc stop \"GoodbyeDPI\"");
-            writer.write("sc delete \"GoodbyeDPI\"");
-            writer.write("sc create \"GoodbyeDPI\" binPath= \"\\\"%CD%\\%_arch%\\goodbyedpi.exe\\\"" + customParam + "\n");
-            writer.write("sc description \"GoodbyeDPI\" \"Started via GoodbyeDPI-Gui (Custom)\"");
-            writer.write("sc start \"GoodbyeDPI\"");
-            writer.write("\n");
-            writer.write("POPD\n");
+
+            writer.write("@ECHO OFF\r\n");
+            writer.write("PUSHD \"%~dp0\"\r\n");
+            writer.write("set _arch=x86\r\n");
+            writer.write("IF \"%PROCESSOR_ARCHITECTURE%\"==\"AMD64\" (set _arch=x86_64)\r\n");
+            writer.write("IF DEFINED PROCESSOR_ARCHITEW6432 (set _arch=x86_64)\r\n");
+            writer.write("\r\n");
+            writer.write("sc stop \"GoodbyeDPI\"\r\n");
+            writer.write("sc delete \"GoodbyeDPI\"\r\n");
+            writer.write("sc create \"GoodbyeDPI\" binPath= \"\\\"%CD%\\%_arch%\\goodbyedpi.exe\\\" " +
+                    (serviceParam.equals("None") ? "" : serviceParam) + "\"\r\n"); // None ise parametre ekleme
+            writer.write("sc description \"GoodbyeDPI\" \"Started via GoodbyeDPI-Gui (Custom)\"\r\n");
+            writer.write("sc start \"GoodbyeDPI\"\r\n");
+            writer.write("POPD\r\n");
             writer.close();
         } catch (IOException e) {
-            mainGui.log("Error while writing the file : " + e.getMessage());
+            mainGui.log("Error writing service install file: " + e.getMessage());
         }
     }
-
 }

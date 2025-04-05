@@ -1,8 +1,6 @@
 package net.gdpi.gui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -10,16 +8,44 @@ import net.gdpi.handlers.ConfigHandler;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
+import net.gdpi.handlers.FileHandler;
 
 public class SettingsGui extends JDialog {
+
+    private String[] modesets = {
+        "1 (Legacy)",
+        "2 (Legacy)",
+        "3 (Legacy)",
+        "4 (Legacy)",
+        "5 (Modern)",
+        "6 (Modern)",
+        "7 (Modern)",
+        "8 (Modern)",
+        "9 (DEFAULT)"};
+
+    private String[] modesetToolTip = {
+        "-p -r -s -f 2 -k 2 -n -e 2",
+        "-p -r -s -f 2 -k 2 -n -e 40",
+        "-p -r -s -e 40",
+        "-p -r -s",
+        "-f 2 -e 2 --auto-ttl --reverse-frag --max-payload",
+        "-f 2 -e 2 --wrong-seq --reverse-frag --max-payload",
+        "-f 2 -e 2 --wrong-chksum --reverse-frag --max-payload",
+        "-f 2 -e 2 --wrong-seq --wrong-chksum --reverse-frag --max-payload",
+        "-f 2 -e 2 --wrong-seq --wrong-chksum --reverse-frag --max-payload -q"};
 
     private JTabbedPane tabbedPane;
     private JPanel generalPanel;
     private JPanel customizePanel;
+    private JPanel modesetPanel;
     private JButton saveButton;
     private JButton okButton;
     private JButton cancelButton;
+    private MainGui mainGui;
 
+    private java.util.List<JCheckBox> modesetCheckboxes = new ArrayList<>();
     private JCheckBox customRedirCheckBox;
     private JTextField customParamField;
     private JTextField serviceParamField;
@@ -28,6 +54,8 @@ public class SettingsGui extends JDialog {
 
     public SettingsGui(MainGui mainGui) {
         super(mainGui, "Settings", true);
+        this.mainGui = mainGui;
+
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception ex) {
@@ -38,7 +66,7 @@ public class SettingsGui extends JDialog {
         createButtons();
         setLocationRelativeTo(null);
 
-        configHandler = new ConfigHandler();
+        configHandler = new ConfigHandler(mainGui);
         loadConfig();
     }
 
@@ -56,6 +84,7 @@ public class SettingsGui extends JDialog {
     private void createTabs() {
         generalTab();
         customizeTab();
+        modesetTab();
     }
 
     private void generalTab() {
@@ -71,6 +100,39 @@ public class SettingsGui extends JDialog {
         tabbedPane.addTab("General", generalPanel);
     }
 
+    private void modesetTab() {
+        modesetPanel = new JPanel(new BorderLayout());
+        modesetPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel checkboxPanel = new JPanel();
+        checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
+
+        modesetCheckboxes.clear(); // Listede eski checkbox'ları temizle
+
+        for (int i = 0; i < modesets.length; i++) { // modesets dizisinin tamamı için
+            JCheckBox modesetCheckBox = new JCheckBox(modesets[i]);
+            modesetCheckBox.setToolTipText(modesetToolTip[i]);
+            modesetCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            // Checkbox seçilirse diğerlerini temizle VE customRedir'i kapat
+            modesetCheckBox.addItemListener(e -> {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    for (JCheckBox cb : modesetCheckboxes) {
+                        if (cb != e.getSource()) cb.setSelected(false);
+                    }
+                    customRedirCheckBox.setSelected(false); // Custom seçenekleri kapat
+                }
+            });
+
+            modesetCheckboxes.add(modesetCheckBox);
+            checkboxPanel.add(modesetCheckBox);
+            checkboxPanel.add(Box.createVerticalStrut(5));
+        }
+
+        modesetPanel.add(checkboxPanel, BorderLayout.NORTH);
+        tabbedPane.addTab("Modesets", modesetPanel);
+    }
+
     private void customizeTab() {
         customizePanel = new JPanel();
         customizePanel.setLayout(new BorderLayout());
@@ -83,7 +145,7 @@ public class SettingsGui extends JDialog {
 
         JPanel checkboxPanel = new JPanel();
         checkboxPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        customRedirCheckBox = new JCheckBox("Enable Custom DNS Redir");
+        customRedirCheckBox = new JCheckBox("Enable Custom Config");
         checkboxPanel.add(customRedirCheckBox);
 
         customParamField = new JTextField(20);
@@ -95,7 +157,7 @@ public class SettingsGui extends JDialog {
         JPanel paramPanel = new JPanel();
         paramPanel.setLayout(new GridLayout(1, 2));
         paramPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JLabel paramLabel = new JLabel("DNS Parameters:");
+        JLabel paramLabel = new JLabel("DNSRedir Parameters:");
         paramPanel.add(paramLabel, BorderLayout.WEST);
         paramPanel.add(customParamField, BorderLayout.CENTER);
 
@@ -119,6 +181,15 @@ public class SettingsGui extends JDialog {
         dnsPanel.add(Box.createVerticalStrut(5));
         dnsPanel.add(servicePanel);
         dnsPanel.add(Box.createVerticalGlue());
+
+        // Custom seçilirse modeset'leri temizle
+        customRedirCheckBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                for (JCheckBox cb : modesetCheckboxes) {
+                    cb.setSelected(false);
+                }
+            }
+        });
 
         customizePanel.add(dnsPanel, BorderLayout.NORTH);
         tabbedPane.addTab("Customize", customizePanel);
@@ -167,19 +238,56 @@ public class SettingsGui extends JDialog {
 
     private void loadConfig() {
         customRedirCheckBox.setSelected(MainGui.customRedir);
-        // customParamField.setText(configHandler.getCustomDnsParams());
     }
 
     private void saveConfig() {
-        boolean customRedir = customRedirCheckBox.isSelected();
-        boolean customService = customRedirCheckBox.isSelected();
-        String customParam = customParamField.getText();
+        boolean anyModesetSelected = modesetCheckboxes.stream()
+            .anyMatch(JCheckBox::isSelected);
+    
+        boolean customRedir;
+        boolean customService;
+        String dnsRedirParam = "None"; // Varsayılan değer
+        String serviceParam = "None";   // Varsayılan değer
+    
+        if (anyModesetSelected) {
+            customRedir = false;
+            customService = false;
+            customRedirCheckBox.setSelected(false);
+    
+            // Seçilen modeset'in index'ini bul
+            int selectedIndex = -1;
+            for (int i = 0; i < modesetCheckboxes.size(); i++) {
+                if (modesetCheckboxes.get(i).isSelected()) {
+                    selectedIndex = i;
+                    break;
+                }
+            }
+            dnsRedirParam = "-" + (selectedIndex + 1); // DNSRedir parametresi
+            serviceParam = "-" + (selectedIndex + 1);   // Service parametresi
+            mainGui.log("Selected Modeset: " + (selectedIndex + 1));
+        } else {
+            customRedir = customRedirCheckBox.isSelected();
+        customService = customRedirCheckBox.isSelected();
 
-        // Save ConfigHandler
-        configHandler.saveConfig(customRedir, customService, customParam);
+        // DNSRedir Parametresi (Placeholder ise "None" yap)
+        dnsRedirParam = (customParamField.getForeground() == Color.GRAY || 
+                        customParamField.getText().trim().isEmpty()) ? 
+                        "None" : customParamField.getText();
+
+        // Service Parametresi (Placeholder ise "None" yap)
+        serviceParam = (serviceParamField.getForeground() == Color.GRAY || 
+                       serviceParamField.getText().trim().isEmpty()) ? 
+                       "None" : serviceParamField.getText();
+
+        // Konsola "None" veya gerçek değeri yaz
+        mainGui.log("DNSRedir Params: " + dnsRedirParam);
+        mainGui.log("Service Params: " + serviceParam);
+        }
+    
+        configHandler.saveConfig(customRedir, customService, dnsRedirParam, serviceParam);
         MainGui.customRedir = customRedir;
         MainGui.customService = customService;
-
+    
         JOptionPane.showMessageDialog(this,
             "Settings saved successfully!",
             "Success",

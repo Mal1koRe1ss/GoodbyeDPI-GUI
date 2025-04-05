@@ -7,7 +7,7 @@ public class ServiceHandler {
     private MainGui mainGui;
     private String currentDir = System.getProperty("user.dir");
     private String cmdFilePath = currentDir + "\\dpi\\";
-    private String installFile = MainGui.customRedir ? "service_install_custom.cmd" : "service_install.cmd";
+    private String installFile = MainGui.customRedir ? "custom_service_install.cmd" : "service_install.cmd"; // Servis için ayrı dosya
     private String removeFile = "service_remove.cmd";
     private String fullInstallPath = cmdFilePath + installFile;
     private String fullRemovePath = cmdFilePath + removeFile;
@@ -16,14 +16,16 @@ public class ServiceHandler {
 
     public ServiceHandler(MainGui mainGui) {
         this.mainGui = mainGui;
+        this.fileHandler = new FileHandler(mainGui);
     }
 
     public void installService() {
         fileHandler.runFileAsAdmin(fullInstallPath);
+        mainGui.log("GoodbyeDPI service installed!");
     }
 
     public void removeService() {
         fileHandler.runFileAsAdmin(fullRemovePath);
+        mainGui.log("GoodbyeDPI service removed!");
     }
-
 }

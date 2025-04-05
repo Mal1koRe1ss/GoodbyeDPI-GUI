@@ -10,14 +10,15 @@ public class RedirHandler {
     private String cmdFileToRun = MainGui.customRedir ? "custom_dnsredir.cmd" : "any_country_dnsredir.cmd";
     private String fullCmdFilePath = cmdFilePath + cmdFileToRun;
 
-    private FileHandler fileHandler = new FileHandler(mainGui);
+    private FileHandler fileHandler; // Initialize etme
 
     public RedirHandler(MainGui mainGui) {
         this.mainGui = mainGui;
+        this.fileHandler = new FileHandler(mainGui); // Constructor'da oluştur
     }
 
     public void runRedir() {
         fileHandler.runFile(fullCmdFilePath);
+        mainGui.log("DNSRedir runned!");
     }
-
 }

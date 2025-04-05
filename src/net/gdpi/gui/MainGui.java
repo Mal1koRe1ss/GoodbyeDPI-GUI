@@ -207,5 +207,6 @@ public class MainGui extends JFrame implements ActionListener {
 
     public void log(String message) {
         logArea.append(message + "\n");
+        logArea.setCaretPosition(logArea.getDocument().getLength());
     }
 }
