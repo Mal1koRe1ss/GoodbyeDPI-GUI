@@ -72,10 +72,13 @@ public class MainGui extends JFrame implements ActionListener {
     }
 
     private void setupMainWindow() {
+        ImageIcon icon = new ImageIcon("assets/gdpigui.png");
+        setIconImage(icon.getImage());
         setupToolPanel();
         setupStatusPanel();
         setupCopyrightLabel();
         configureWindow();
+        setLocationRelativeTo(null);
     }
 
     private void setupToolPanel() {
