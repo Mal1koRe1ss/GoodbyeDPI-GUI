@@ -38,6 +38,12 @@ public class MainGui extends JFrame implements ActionListener {
      * Constructor for the MainGui class.
      */
     public MainGui() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            System.err.println("Look and feel ayarlanırken hata oluştu: " + e.getMessage());
+        }
+
         // Add settings to the menu and set up the menu bar
         menu.add(settings);
         menuBar.add(menu);
