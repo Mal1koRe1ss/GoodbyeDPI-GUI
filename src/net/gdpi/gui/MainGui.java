@@ -1,7 +1,6 @@
 package net.gdpi.gui;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +48,14 @@ public class MainGui extends JFrame implements ActionListener {
         menu.add(settings);
         menuBar.add(menu);
         this.setJMenuBar(menuBar);
-        settings.addActionListener(this);
+
+        //set the Action Listener to the settings object.
+        //settings.addActionListener(this); // Remove this line
+
+        settings.addActionListener(e -> {
+            SettingsGui settingsGui = new SettingsGui(MainGui.this);
+            settingsGui.setVisible(true);
+        });
 
         // Set up buttons
         setupButtons();
@@ -113,6 +119,7 @@ public class MainGui extends JFrame implements ActionListener {
 
         // Copyright Label Settings
         copyRightLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        copyRightLabel.setFont(new Font("Sans Serif", Font.PLAIN, 11));
         this.add(copyRightLabel, BorderLayout.SOUTH);
 
         // Window settings
@@ -127,9 +134,10 @@ public class MainGui extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Handle menu item actions
-        if (e.getSource() == settings) {
-            new SettingsGui();
-        } else if (e.getSource() == startButton) {
+        /*if (e.getSource() == settings) { //Remove this entire block
+            SettingsGui settingsGui = new SettingsGui(this);
+            settingsGui.setVisible(true);
+        } else */if (e.getSource() == startButton) {
             // TODO Redir openner
         } else if (e.getSource() == installButton) {
             // TODO Service Installer (net.gdpi.service.install.java)
