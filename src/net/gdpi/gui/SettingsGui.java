@@ -1,6 +1,9 @@
 package net.gdpi.gui;
 
 import javax.swing.*;
+
+import net.gdpi.handlers.ConfigHandler;
+
 import java.awt.*;
 
 public class SettingsGui extends JDialog {
@@ -55,8 +58,36 @@ public class SettingsGui extends JDialog {
         // Customize Tab
         customizePanel = new JPanel();
         customizePanel.setLayout(new BorderLayout());
-        customizePanel.add(new JLabel("Customize Settings Content"), BorderLayout.NORTH);
+
+        JPanel configPanel = new JPanel();
+        configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.Y_AXIS));
+
+        // Örnek UI bileşenleri
+        JCheckBox customRedirCheckBox = new JCheckBox("Custom DNS Redir");
+        JTextField customParamField = new JTextField(20);
+        customParamField.setToolTipText("Custom parameter for DNS Redir");
+
+        JButton saveConfigButton = new JButton("Save Config");
+
+        configPanel.add(new JLabel("Custom DNS Redir:"));
+        configPanel.add(customRedirCheckBox);
+        configPanel.add(new JLabel("Custom Parameter:"));
+        configPanel.add(customParamField);
+        configPanel.add(saveConfigButton);
+
+        customizePanel.add(configPanel, BorderLayout.NORTH);
         customizePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         tabbedPane.addTab("Customize", customizePanel);
+
+        ConfigHandler configHandler = new ConfigHandler();
+
+        saveConfigButton.addActionListener(e -> {
+            boolean customRedir = customRedirCheckBox.isSelected();
+            String customParam = customParamField.getText();
+
+            // ConfigHandler'a değerleri kaydetme
+            configHandler.saveConfig(customRedir, customParam);
+            MainGui.customRedir = true;
+        });
     }
 }

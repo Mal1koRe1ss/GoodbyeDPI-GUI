@@ -1,12 +1,13 @@
 package net.gdpi.gui;
 
 import javax.swing.*;
+
+import net.gdpi.handlers.RedirHandler;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Main GUI class for the application.
@@ -14,6 +15,8 @@ import java.net.URISyntaxException;
 public class MainGui extends JFrame implements ActionListener {
     // Constants
     private static final String GITHUB_URL = "https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI";
+    public static boolean customRedir = false;
+    public static boolean customService = false;
 
     // Menu components
     private JMenuBar menuBar = new JMenuBar();
@@ -155,12 +158,15 @@ public class MainGui extends JFrame implements ActionListener {
                 log("GitHub bağlantı hatası: " + ex.getMessage());
             }
         });
+
+        startButton.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
-            // TODO Redir opener
+            RedirHandler handler = new RedirHandler(this); 
+            handler.runRedir();
         } else if (e.getSource() == installButton) {
             // TODO Service Installer
         } else if (e.getSource() == removeButton) {
