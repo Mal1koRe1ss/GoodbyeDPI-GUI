@@ -3,6 +3,8 @@ package net.gdpi.gui;
 import javax.swing.*;
 import com.formdev.flatlaf.FlatDarkLaf;
 import net.gdpi.handlers.RedirHandler;
+import net.gdpi.handlers.ServiceHandler;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -163,6 +165,8 @@ public class MainGui extends JFrame implements ActionListener {
         });
 
         startButton.addActionListener(this);
+        installButton.addActionListener(this);
+        removeButton.addActionListener(this);
     }
 
     @Override
@@ -171,9 +175,11 @@ public class MainGui extends JFrame implements ActionListener {
             RedirHandler handler = new RedirHandler(this);
             handler.runRedir();
         } else if (e.getSource() == installButton) {
-            // TODO Service Installer
+            ServiceHandler handler = new ServiceHandler(this);
+            handler.installService();
         } else if (e.getSource() == removeButton) {
-            // TODO Service Remover
+            ServiceHandler handler = new ServiceHandler(this);
+            handler.removeService();
         }
     }
 

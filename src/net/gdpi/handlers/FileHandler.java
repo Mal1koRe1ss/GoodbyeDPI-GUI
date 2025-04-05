@@ -20,4 +20,18 @@ public class FileHandler {
             mainGui.log("Error while running file: " + e.getMessage());
         }
     }
+
+    public void runFileAsAdmin(String filename) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(
+                "powershell",
+                "Start-Process",
+                "-FilePath", filename,
+                "-Verb", "RunAs"
+            );
+            pb.start();
+        } catch (IOException e) {
+            mainGui.log("Error while runnig as administrator: " + e.getMessage());
+        }
+    }
 }

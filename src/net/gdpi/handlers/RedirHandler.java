@@ -17,7 +17,7 @@ public class RedirHandler {
     }
 
     public void runRedir() {
-            fileHandler.runFile(fullCmdFilePath);
+        fileHandler.runFile(fullCmdFilePath);
     }
 
 }
