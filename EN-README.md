@@ -1,5 +1,5 @@
 <div align="right">
-  <a href="./README.md">
+  <a href="https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI/blob/main/docs/README.md">
     <img src="https://img.shields.io/badge/Türkçe-lang?style=flat&label=lang&color=%234933ff">
   </a>
 </div>
