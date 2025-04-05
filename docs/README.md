@@ -15,7 +15,7 @@
 <p align="center">
   DPI'ınızı modern bir arayüzden takip ederek bypasslayın.
   <br>
-  <a href="#"><strong>Dökümasyonları incele »</strong></a>
+  <a href="https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI/"><strong>Dökümasyonları incele »</strong></a>
   <br>
   <br>
   <a href="#">Hata Raporla</a>
@@ -38,3 +38,21 @@ Ama bu koşullarla:
 - **Ticari Olmayan** — Yazılımı ticari amaçlarla kullanamazsınız..
 
 Daha fazla ayrıntı için, burayı kontrol ediniz [CC BY-NC 4.0 License](https://creativecommons.org/licenses/by-nc/4.0/).
+
+## Ekip
+<table>
+  <tr>
+    <td align="center" width="200">
+      <a href="https://github.com/Mal1koRe1ss">
+        <img src="https://github.com/user-attachments/assets/a4f77b6b-9270-4e64-b6ae-36ef4993fec1" height="90"><br>
+        @Mal1koRe1ss
+      </a>
+    </td>
+    <td align="center" width="200">
+      <a href="https://github.com/p0unter">
+        <img src="https://github.com/user-attachments/assets/80faed3f-90a0-4e1b-bf8e-38d79ff9ef35" height="90"><br>
+        @p0unter
+      </a>
+    </td>
+  </tr>
+</table>
