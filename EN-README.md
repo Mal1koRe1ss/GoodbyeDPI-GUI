@@ -15,7 +15,7 @@
 <p align="center">
   Bypass your DPI with a modern interface for tracking.
   <br>
-  <a href="#"><strong>Explore Documentation »</strong></a>
+  <a href="https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI"><strong>Explore Documentation »</strong></a>
   <br>
   <br>
   <a href="#">Report Bug</a>
