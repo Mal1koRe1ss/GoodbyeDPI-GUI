@@ -4,164 +4,172 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Main GUI class for the application.
  */
 public class MainGui extends JFrame implements ActionListener {
+    // Constants
+    private static final String GITHUB_URL = "https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI";
 
     // Menu components
-    JMenuBar menuBar = new JMenuBar();
-    JMenu menu = new JMenu("Menu");
-    JMenuItem settings = new JMenuItem("Settings");
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu file = new JMenu("File");
+    private JMenuItem settings = new JMenuItem("Settings");
+    private JMenuItem exit = new JMenuItem("Exit");
+    private JMenu help = new JMenu("Help");
+    private JMenuItem github = new JMenuItem("Github");
 
     // Buttons
-    JButton startButton = new JButton("Open DNSRedir");
-    JButton installButton = new JButton("Install service");
-    JButton removeButton = new JButton("Remove service");
+    private JButton startButton = new JButton("Open DNSRedir");
+    private JButton installButton = new JButton("Install service");
+    private JButton removeButton = new JButton("Remove service");
 
     // Panels
-    JPanel buttonPanel = new JPanel();
-    JPanel statusPanel = new JPanel();
-    JPanel wrapperPanel_1 = new JPanel();
-    JPanel toolsPanel = new JPanel();
+    private JPanel buttonPanel = new JPanel();
+    private JPanel statusPanel = new JPanel();
+    private JPanel wrapperPanel = new JPanel();
+    private JPanel toolsPanel = new JPanel();
 
     // Text area for logging
-    JTextArea logArea;
+    private JTextArea logArea;
 
     // Labels
-    JLabel toolsLabel = new JLabel("Tools");
-    JLabel logLabel = new JLabel("Log Area");
-    JLabel copyRightLabel = new JLabel("Copyright 2025 © Goodbye DPI GUI, Pounter & Mal1kore1ss");
+    private JLabel toolsLabel = new JLabel("Tools");
+    private JLabel logLabel = new JLabel("Log Area");
+    private JLabel copyRightLabel = new JLabel("Copyright 2025 © Goodbye DPI GUI, Pounter & Mal1kore1ss");
 
-    /**
-     * Constructor for the MainGui class.
-     */
     public MainGui() {
+        initializeLookAndFeel();
+        setupMenu();
+        setupMainWindow();
+    }
+
+    private void initializeLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+        } catch (Exception e) {
             System.err.println("Look and feel error: " + e.getMessage());
         }
+    }
 
-        // Add settings to the menu and set up the menu bar
-        menu.add(settings);
-        menuBar.add(menu);
+    private void setupMenu() {
+        file.add(settings);
+        file.add(exit);
+        help.add(github);
+
+        menuBar.add(file);
+        menuBar.add(help);
         this.setJMenuBar(menuBar);
 
-        //set the Action Listener to the settings object.
-        //settings.addActionListener(this); // Remove this line
+        menuListeners();
+    }
 
-        settings.addActionListener(e -> {
-            SettingsGui settingsGui = new SettingsGui(MainGui.this);
-            settingsGui.setVisible(true);
-        });
+    private void setupMainWindow() {
+        setupToolPanel();
+        setupStatusPanel();
+        setupCopyrightLabel();
+        configureWindow();
+    }
 
-        // Set up buttons
-        setupButtons();
-
-        // Configure the tools panel
+    private void setupToolPanel() {
         toolsPanel.setLayout(new BorderLayout());
-        toolsPanel.add(toolsLabel, BorderLayout.NORTH);
         toolsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
         toolsLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        logLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        // Configure the button panel
+        setupButtons();
+        toolsPanel.add(toolsLabel, BorderLayout.NORTH);
+        toolsPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        this.add(toolsPanel, BorderLayout.WEST);
+    }
+
+    private void setupButtons() {
+        setButtonSize();
+        setButtons();
+
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        // Align buttons to the center
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         installButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         removeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add buttons to the button panel
         buttonPanel.add(startButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         buttonPanel.add(installButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         buttonPanel.add(removeButton);
+    }
 
-        // Add the button panel to the tools panel
-        toolsPanel.add(buttonPanel, BorderLayout.CENTER);
-
-        // Add the tools panel to the west of the frame
-        this.add(toolsPanel, BorderLayout.WEST);
-
-        // Status panel settings
+    private void setupStatusPanel() {
         statusPanel.setLayout(new BorderLayout());
         statusPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        logLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        // Create a text area for logging
         logArea = new JTextArea(20, 50);
         logArea.setEditable(false);
         logArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
-        // Create a scroll pane for the text area
         JScrollPane logScrollPane = new JScrollPane(logArea);
-
-        // Add log label and scroll pane to the status panel
         statusPanel.add(logLabel, BorderLayout.NORTH);
         statusPanel.add(logScrollPane, BorderLayout.CENTER);
 
-        // Set the size of the status panel
         statusPanel.setPreferredSize(new Dimension(0, 300));
         statusPanel.setMinimumSize(new Dimension(0, 300));
         statusPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 300));
 
-        // Create a wrapper panel to hold the status panel
-        wrapperPanel_1.setLayout(new BorderLayout());
-        wrapperPanel_1.add(statusPanel, BorderLayout.NORTH);
+        wrapperPanel.setLayout(new BorderLayout());
+        wrapperPanel.add(statusPanel, BorderLayout.NORTH);
+        this.add(wrapperPanel, BorderLayout.CENTER);
+    }
 
-        // Add the wrapper panel to the center of the frame
-        this.add(wrapperPanel_1, BorderLayout.CENTER);
-
-        // Copyright Label Settings
+    private void setupCopyrightLabel() {
         copyRightLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         copyRightLabel.setFont(new Font("Sans Serif", Font.PLAIN, 11));
         this.add(copyRightLabel, BorderLayout.SOUTH);
+    }
 
-        // Window settings
+    private void configureWindow() {
         this.setTitle("Goodbye DPI GUI");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(650, 360);
         this.setResizable(false);
-
         this.setVisible(true);
+    }
+
+    private void menuListeners() {
+        settings.addActionListener(e -> new SettingsGui(this).setVisible(true));
+
+        exit.addActionListener(e -> System.exit(0));
+
+        github.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(new URI(GITHUB_URL));
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "GitHub sayfası açılamadı: " + ex.getMessage(),
+                        "Hata", JOptionPane.ERROR_MESSAGE);
+                log("GitHub bağlantı hatası: " + ex.getMessage());
+            }
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Handle menu item actions
-        /*if (e.getSource() == settings) { //Remove this entire block
-            SettingsGui settingsGui = new SettingsGui(this);
-            settingsGui.setVisible(true);
-        } else */if (e.getSource() == startButton) {
-            // TODO Redir openner
+        if (e.getSource() == startButton) {
+            // TODO Redir opener
         } else if (e.getSource() == installButton) {
-            // TODO Service Installer (net.gdpi.service.install.java)
+            // TODO Service Installer
         } else if (e.getSource() == removeButton) {
-            // TODO Service Remover (net.gdpi.service.install.java)
+            // TODO Service Remover
         }
     }
 
-    /**
-     * Set up buttons by calling setButtonSize and setButtons methods.
-     */
-    public void setupButtons() {
-        setButtonSize();
-        setButtons();
-    }
-
-    /**
-     * Set the size of buttons.
-     */
-    public void setButtonSize() {
-        int width = 180;
-        int height = 40;
-
-        Dimension size = new Dimension(width, height);
+    private void setButtonSize() {
+        Dimension size = new Dimension(180, 40);
 
         startButton.setPreferredSize(size);
         startButton.setMinimumSize(size);
@@ -176,10 +184,7 @@ public class MainGui extends JFrame implements ActionListener {
         removeButton.setMaximumSize(size);
     }
 
-    /**
-     * Set the text position of buttons to center.
-     */
-    public void setButtons() {
+    private void setButtons() {
         startButton.setHorizontalTextPosition(SwingConstants.CENTER);
         installButton.setHorizontalTextPosition(SwingConstants.CENTER);
         removeButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -189,11 +194,6 @@ public class MainGui extends JFrame implements ActionListener {
         removeButton.setFocusPainted(false);
     }
 
-    /**
-     * Log a message to the text area.
-     *
-     * @param message The message to log.
-     */
     public void log(String message) {
         logArea.append(message + "\n");
     }
