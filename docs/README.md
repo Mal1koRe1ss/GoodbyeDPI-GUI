@@ -15,12 +15,12 @@
 <p align="center">
   DPI'ınızı modern bir arayüzden takip ederek bypasslayın.
   <br>
-  <a href="https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI/"><strong>Dökümasyonları incele »</strong></a>
+  <a href="https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI/tree/main/docs"><strong>Dökümasyonları incele »</strong></a>
   <br>
   <br>
-  <a href="#">Hata Raporla</a>
+  <a href="https://github.com/Mal1koRe1ss/GoodbyeDPI-GUI/issues">Hata Raporla</a>
   ·
-  <a href="#">Ekip</a>
+  <a href="#ekip">Ekip</a>
   ·
   <a href="#">Destek Ol</a>
 </p>
